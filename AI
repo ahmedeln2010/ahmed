@@ -1,0 +1,74 @@
+import openai
+import os
+from moviepy.editor import TextClip, concatenate_videoclips, ColorClip
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
+
+# Configuration
+OPENAI_API_KEY = 'your_openai_api_key'
+TIKTOK_USERNAME = 'story.time6259'
+TIKTOK_PASSWORD = 'Omar@2020'
+VIDEO_FILE_PATH = 'story_video.mp4'
+
+# Function to generate a story using GPT-4
+def generate_story(prompt):
+    openai.api_key = OPENAI_API_KEY
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=500
+    )
+    return response.choices[0].text.strip();’
+
+# Function to create a video from the generated story
+def create_video_from_story(story):
+    # Create a background clip
+    background = ColorClip(size=(720, 1280), color=(255, 255, 255), duration=10)
+
+    # Create a text clip with the story
+    text_clip = TextClip(story, fontsize=24, color='black', size=(720, 1280), method='caption')
+    text_clip = text_clip.set_duration(10)
+
+    # Combine the background and text
+    video = concatenate_videoclips([background, text_clip])
+
+    # Save the video
+    video.write_videofile(VIDEO_FILE_PATH, fps=24)
+
+# Function to upload the video to TikTok using Selenium
+def upload_to_tiktok(video_path, story.time6259, Omar@2020):
+    driver = webdriver.Chrome()  # Ensure ChromeDriver is installed and in PATH
+    driver.get("https://www.tiktok.com/login")
+
+    # Login to TikTok
+    time.sleep(5)
+    driver.find_element_by_name("story.time6259").send_keys(story.time6259)
+    driver.find_element_by_name("Omar@2020").send_keys(Omar@2020 + Keys.RETURN)
+    time.sleep(10)
+
+    # Navigate to upload page
+    driver.get("https://www.tiktok.com/upload")
+    time.sleep(10)
+
+    # Upload the video
+    driver.find_element_by_xpath("//input[@type='file']").send_keys(video_path)
+    time.sleep(30)
+
+    # Optionally: Add description and post (update as necessary)
+    # description_input = driver.find_element_by_xpath("//textarea[@placeholder='Describe your video']")
+    # description_input.send_keys("Daily Story Video!")
+    # post_button = driver.find_element_by_xpath("//button[text()='Post']")
+    # post_button.click()
+
+    time.sleep(10)
+    driver.quit()
+
+# Main function to execute the workflow
+def main():
+    story = generate_story("Generate a short story about a hero's adventure.")
+    create_video_from_story(story)
+    upload_to_tiktok(VIDEO_FILE_PATH, TIKTOK_story.time6259, TIKTOK_Omar@2020)
+
+if __name__ == '__main__':
+    main()
